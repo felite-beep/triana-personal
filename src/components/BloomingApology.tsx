@@ -147,7 +147,7 @@ export default function BloomingApology() {
               <p className="bloom-note-text">{currentMessage}</p>
               <p className="bloom-status">
                 {isComplete
-                  ? "Bunganya udah mekar sepenuhnya. Semoga cinta kita juga terus tumbuh dan berkembang."
+                  ? "Bunganya udah mekar sepenuhnya. Semoga cinta kita juga terus tumbuh dan bermekaran kayak bunganya yaaa..."
                   : `Bunga mekar ${openedPetals}/6 kelopak`}
               </p>
               <div className="bloom-dots" aria-hidden="true">

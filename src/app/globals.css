@@ -10,12 +10,6 @@
   --ink-muted: rgba(78, 52, 64, 0.78);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-body);
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
@@ -852,10 +846,17 @@ section > .surface-card:nth-child(4) {
 }
 
 .empathy-status {
-  margin: 0.65rem 0 0;
-  color: rgba(118, 73, 93, 0.82);
+  margin: 1.2rem 0 0;
   font-size: 0.88rem;
   line-height: 1.5;
+  padding: 0.62rem 0.75rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(90deg, rgba(255, 238, 246, 0.95), rgba(255, 248, 252, 0.88));
+}
+
+.empathy-status--highlight {
+  margin-top: 0.9rem;
+  font-weight: 600;
 }
 
 .empathy-share-button {
@@ -1053,6 +1054,13 @@ section > .surface-card:nth-child(4) {
 }
 
 @media (max-width: 640px) {
+  #story-cards,
+  #memory-timeline,
+  #blooming-apology,
+  #closing-choice {
+    scroll-margin-top: 5.4rem;
+  }
+
   .page-shell {
     padding-top: 0.9rem;
     padding-bottom: 1rem;

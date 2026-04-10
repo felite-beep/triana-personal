@@ -1,11 +1,58 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import BloomingApology from "@/components/BloomingApology";
 import PromiseAndChoice from "@/components/PromiseAndChoice";
 
 export default function Home() {
+  const [visibleSections, setVisibleSections] = useState(1);
   const isVideoFile = (path: string) => /\.(mp4|webm|ogg)$/i.test(path);
+
+  const scrollToSection = (targetId: string) => {
+    const target = document.getElementById(targetId);
+    if (!target) return;
+
+    const stickyHeader = document.querySelector("main > header") as HTMLElement | null;
+    const offset = (stickyHeader?.offsetHeight ?? 0) + 18;
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+
+    window.scrollTo({
+      top: Math.max(top, 0),
+      behavior: "smooth",
+    });
+  };
+
+  const revealNextSection = (targetId: string) => {
+    const scrollToTarget = () => scrollToSection(targetId);
+
+    const sectionOrder: Record<string, number> = {
+      "story-cards": 2,
+      "memory-timeline": 3,
+      "blooming-apology": 4,
+      "closing-choice": 5,
+    };
+
+    const required = sectionOrder[targetId] ?? 1;
+
+    if (visibleSections >= required) {
+      scrollToTarget();
+      return;
+    }
+
+    setVisibleSections((current) => Math.min(5, current + 1));
+    window.setTimeout(scrollToTarget, 140);
+  };
+
+  const revealAllSections = () => {
+    if (visibleSections < 5) {
+      setVisibleSections(5);
+    }
+
+    window.setTimeout(() => {
+      scrollToSection("story-cards");
+    }, 140);
+  };
 
   const storyCards = [
     {
@@ -79,12 +126,12 @@ Dan kalau kamu masih ada sedikit ruang, aku pengen kita bisa ngobrol lagi—pela
             </p>
 
             <div className="hero-cta-row">
-              <a className="hero-btn-primary" href="#story-cards">
+              <button className="hero-btn-primary" onClick={() => revealNextSection("story-cards")} type="button">
                 Baca pelan-pelan
-              </a>
-              <a className="hero-btn-ghost" href="#closing-choice">
-                Lihat cara hadapi konflik
-              </a>
+              </button>
+              <button className="hero-btn-ghost" onClick={revealAllSections} type="button">
+                Lihat semua section
+              </button>
             </div>
 
             <div className="hero-meta-grid">
@@ -103,79 +150,109 @@ Dan kalau kamu masih ada sedikit ruang, aku pengen kita bisa ngobrol lagi—pela
             </div>
           </article>
 
-          <article id="story-cards" className="surface-card sm:col-span-2">
-            <h2 className="section-title">Yang Ingin Aku Sampaikan</h2>
-            <p className="section-copy mb-5">
-Ada beberapa hal yang mungkin belum pernah aku sampaikan dengan cara yang tepat.
-Jadi aku coba tulis pelan-pelan di sini.
-            </p>
+          {visibleSections >= 2 ? (
+            <>
+              <article id="story-cards" className="surface-card sm:col-span-2">
+                <h2 className="section-title">Yang Ingin Aku Sampaikan</h2>
+                <p className="section-copy mb-5">
+  Ada beberapa hal yang mungkin belum pernah aku sampaikan dengan cara yang tepat.
+  Jadi aku coba tulis pelan-pelan di sini.
+                </p>
 
-            <div className="story-grid">
-              {storyCards.map((card) => (
-                <div key={card.tag} className="story-card-item">
-                  <p className="story-chip">{card.tag}</p>
-                  <h3 className="story-title">{card.title}</h3>
-                  <p className="story-copy">{card.body}</p>
+                <div className="story-grid">
+                  {storyCards.map((card) => (
+                    <div key={card.tag} className="story-card-item">
+                      <p className="story-chip">{card.tag}</p>
+                      <h3 className="story-title">{card.title}</h3>
+                      <p className="story-copy">{card.body}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </article>
+              </article>
 
-          <article id="memory-timeline" className="surface-card sm:col-span-2">
-            <h2 className="section-title">Perjalanan Kita</h2>
-            <p className="section-copy mb-5">
-              Aku buat section ini biar kita sama-sama ingat hal-hal kecil yang dulu pernah bikin semuanya terasa hangat.
-            </p>
+              {visibleSections < 3 ? (
+                <div className="sm:col-span-2 mt-1">
+                  <button className="hero-btn-ghost" onClick={() => revealNextSection("memory-timeline")} type="button">
+                    Lanjut ke Perjalanan Kita
+                  </button>
+                </div>
+              ) : null}
 
-            <div className="timeline-list">
-              {timelineMoments.map((moment, index) => {
-                const isVideo = isVideoFile(moment.image);
+              {visibleSections >= 3 ? (
+                <article id="memory-timeline" className="surface-card sm:col-span-2">
+                  <h2 className="section-title">Perjalanan Kita</h2>
+                  <p className="section-copy mb-5">
+                    Aku buat section ini biar kita sama-sama ingat hal-hal kecil yang dulu pernah bikin semuanya terasa hangat.
+                  </p>
 
-                return (
-                  <article key={moment.date} className={`timeline-item ${isVideo ? "timeline-item--video" : "timeline-item--image"}`}>
-                    <div className={`timeline-media-wrap ${isVideo ? "timeline-media-wrap--video" : ""}`}>
-                      {isVideo ? (
-                        <video
-                          className="timeline-media timeline-media--video"
-                          src={moment.image}
-                          muted
-                          loop
-                          autoPlay
-                          playsInline
-                          preload="metadata"
-                        />
-                      ) : (
-                        <Image
-                          className="timeline-media"
-                          src={moment.image}
-                          alt={moment.imageAlt}
-                          width={1200}
-                          height={900}
-                          loading="eager"
-                          sizes="(min-width: 760px) 11rem, 34vw"
-                        />
-                      )}
-                    </div>
+                  <div className="timeline-list">
+                    {timelineMoments.map((moment, index) => {
+                      const isVideo = isVideoFile(moment.image);
 
-                    <div className="timeline-content">
-                      <div className="timeline-top">
-                        <p className="timeline-index">Momen 0{index + 1}</p>
-                        <h3 className="timeline-title">{moment.title}</h3>
-                        <p className="timeline-meta">
-                          {moment.date} | {moment.place}
-                        </p>
-                      </div>
-                      <p className="timeline-insight">{moment.insight}</p>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          </article>
+                      return (
+                        <article key={moment.date} className={`timeline-item ${isVideo ? "timeline-item--video" : "timeline-item--image"}`}>
+                          <div className={`timeline-media-wrap ${isVideo ? "timeline-media-wrap--video" : ""}`}>
+                            {isVideo ? (
+                              <video
+                                className="timeline-media timeline-media--video"
+                                src={moment.image}
+                                muted
+                                loop
+                                autoPlay
+                                playsInline
+                                preload="metadata"
+                              />
+                            ) : (
+                              <Image
+                                className="timeline-media"
+                                src={moment.image}
+                                alt={moment.imageAlt}
+                                width={1200}
+                                height={900}
+                                loading="eager"
+                                sizes="(min-width: 760px) 11rem, 34vw"
+                              />
+                            )}
+                          </div>
 
-          <BloomingApology />
+                          <div className="timeline-content">
+                            <div className="timeline-top">
+                              <p className="timeline-index">Momen 0{index + 1}</p>
+                              <h3 className="timeline-title">{moment.title}</h3>
+                              <p className="timeline-meta">
+                                {moment.date} | {moment.place}
+                              </p>
+                            </div>
+                            <p className="timeline-insight">{moment.insight}</p>
+                          </div>
+                        </article>
+                      );
+                    })}
+                  </div>
+                </article>
+              ) : null}
 
-          <PromiseAndChoice />
+              {visibleSections >= 3 && visibleSections < 4 ? (
+                <div className="sm:col-span-2 mt-1">
+                  <button className="hero-btn-ghost" onClick={() => revealNextSection("blooming-apology")} type="button">
+                    Lanjut ke Blooming Message
+                  </button>
+                </div>
+              ) : null}
+
+              {visibleSections >= 4 ? <BloomingApology /> : null}
+
+              {visibleSections >= 4 && visibleSections < 5 ? (
+                <div className="sm:col-span-2 mt-1">
+                  <button className="hero-btn-ghost" onClick={() => revealNextSection("closing-choice")} type="button">
+                    Lanjut ke Conflict Resolution Approach
+                  </button>
+                </div>
+              ) : null}
+
+              {visibleSections >= 5 ? <PromiseAndChoice /> : null}
+            </>
+          ) : null}
         </section>
       </main>
     </div>
