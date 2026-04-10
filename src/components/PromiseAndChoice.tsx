@@ -1,7 +1,6 @@
 "use client";
 
-import { toPng } from "html-to-image";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { FaSmileWink } from "react-icons/fa";
 
 type AnalysisResult = {
@@ -23,27 +22,12 @@ type AnalysisResponse = {
 const EMPATHY_PROMPT = "Kalau suatu saat aku lagi marah atau kita berantem lagi, kamu bakal merespons aku seperti apa supaya masalahnya nggak makin besar dan kita bisa baikan?";
 const WHATSAPP_TARGET_NUMBER = "6281211361258";
 
-const dataUrlToFile = (dataUrl: string, fileName: string) => {
-  const [header, base64] = dataUrl.split(",");
-  const mimeMatch = header.match(/data:(.*?);base64/);
-  const mimeType = mimeMatch?.[1] || "image/png";
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-
-  for (let index = 0; index < binary.length; index += 1) {
-    bytes[index] = binary.charCodeAt(index);
-  }
-
-  return new File([bytes], fileName, { type: mimeType });
-};
-
 export default function PromiseAndChoice() {
   const [draft, setDraft] = useState("");
   const [hasGeneratedResult, setHasGeneratedResult] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [result, setResult] = useState<AnalysisResult | null>(null);
-  const resultCardRef = useRef<HTMLDivElement | null>(null);
 
   const scoreWidth = useMemo(() => `${result?.score ?? 0}%`, [result?.score]);
   const canShare = hasGeneratedResult && draft.trim().length > 0 && result !== null;
@@ -110,51 +94,7 @@ export default function PromiseAndChoice() {
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  const shareResultAsImage = async () => {
-    if (!canShare || result === null || !resultCardRef.current) return;
 
-    try {
-      const dataUrl = await toPng(resultCardRef.current, {
-        cacheBust: true,
-        pixelRatio: 2,
-      });
-
-      const fileName = `hasil-konflik-${new Date().toISOString().slice(0, 10)}.png`;
-      const imageFile = dataUrlToFile(dataUrl, fileName);
-      const caption = "Aku kirim hasil pendekatan konfliknya ya. Aku lampirin screenshot hasilnya.";
-
-      const canUseNativeShare =
-        typeof navigator !== "undefined" &&
-        "share" in navigator &&
-        "canShare" in navigator &&
-        navigator.canShare({ files: [imageFile] });
-
-      if (canUseNativeShare) {
-        await navigator.share({
-          title: "Hasil pendekatan konflik",
-          text: caption,
-          files: [imageFile],
-        });
-        setStatusMessage("Silakan pilih WhatsApp di menu share untuk kirim screenshot + caption.");
-        return;
-      }
-
-      const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = fileName;
-      link.click();
-
-      const waUrl = `https://wa.me/${WHATSAPP_TARGET_NUMBER}?text=${encodeURIComponent(caption)}`;
-      window.open(waUrl, "_blank", "noopener,noreferrer");
-      setStatusMessage("Screenshot hasil sudah di-download. Tinggal attach gambarnya di WhatsApp.");
-    } catch (error) {
-      if (error instanceof Error && error.name === "AbortError") {
-        setStatusMessage("Share dibatalkan.");
-        return;
-      }
-      setStatusMessage("Gagal membuat screenshot hasil. Coba lagi sebentar.");
-    }
-  };
 
   return (
     <article className="surface-card sm:col-span-2 empathy-card" id="closing-choice">
@@ -195,7 +135,7 @@ export default function PromiseAndChoice() {
       {statusMessage ? <p className="empathy-status">{statusMessage}</p> : null}
 
       {hasGeneratedResult && result !== null ? (
-        <div className="empathy-result" aria-live="polite" ref={resultCardRef}>
+        <div className="empathy-result" aria-live="polite">
           <div className="empathy-score-row">
             <div>
               <p className="empathy-score-title">Skor Empati: {result.score}/100</p>
@@ -248,10 +188,6 @@ export default function PromiseAndChoice() {
 
           <button className="hero-btn-ghost empathy-share-button" onClick={shareToWhatsapp} disabled={!canShare} type="button">
             Share ke WhatsApp
-          </button>
-
-          <button className="hero-btn-ghost empathy-share-button" onClick={shareResultAsImage} disabled={!canShare} type="button">
-            Share via Screenshot (PNG)
           </button>
         </div>
       ) : null}
