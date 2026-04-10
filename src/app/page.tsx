@@ -1,64 +1,182 @@
+"use client";
+
 import Image from "next/image";
+import BloomingApology from "@/components/BloomingApology";
+import PromiseAndChoice from "@/components/PromiseAndChoice";
 
 export default function Home() {
+  const isVideoFile = (path: string) => /\.(mp4|webm|ogg)$/i.test(path);
+
+  const storyCards = [
+    {
+      tag: "Aku Datang Pelan-Pelan",
+      title: "Aku nggak datang buat maksa semuanya langsung baik",
+      body: "Aku cuma pengen buka ruang ngobrol yang lebih tenang. Belajar nyampein perasaan tanpa bikin keadaan makin berat.",
+    },
+    {
+      tag: "Isi Hatiku",
+      title: "Aku kangen. Dan aku belajar. Lagi dan lagi.",
+      body: "Di balik semuanya, aku masih peduli sama kamu. Dan aku sadar, aku belum selalu bisa bersikap dewasa, terutama saat emosi. Sekarang aku lagi bener-bener berusaha memperbaiki itu.",
+    },
+    {
+      tag: "Harapanku",
+      title: "Aku nggak butuh jawaban sekarang.",
+      body: "Tapi kalau suatu saat kita coba lagi, aku harap kita bisa jalanin dengan komunikasi yang lebih hangat, lebih jujur, dan saling jaga.",
+    },
+  ];
+
+  const timelineMoments = [
+    {
+      date: "26 Oktober 2025",
+      place: "Nikahan Bella",
+      title: "Pertama kali ketemu",
+      insight: "Aku masih inget momen itu. Sederhana, tapi dari situ semuanya mulai terasa beda.",
+      image: "/memories/moment-1.jpg",
+      imageAlt: "Kenangan pertama kali kita ketemu di nikahan Bella",
+    },
+    {
+      date: "27 Desember 2025",
+      place: "Jakarta",
+      title: "Ngopi santai di jalan Sabang",
+      insight: "Jalan pelan-pelan, ngobrol santai, dan rasanya kita nyambung tanpa harus maksa.",
+      image: "/memories/moment-2.mp4",
+      imageAlt: "Kenangan ketiga kali ketemu di kafe Jalan Sabang, Jakarta",
+    },
+    {
+      date: "28 Maret 2026",
+      place: "Ciwalk, Bandung",
+      title: "Terakhir kali ketemu",
+      insight: "Waktu itu masih keinget jelas. Hangat, simpel, tapi cukup buat ninggalin rasa yang susah dilupain.",
+      image: "/memories/moment-3.jpg",
+      imageAlt: "Kenangan terakhir kali kita ketemu di Bandung, Ciwalk",
+    },
+  ];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="page-shell relative flex flex-1 justify-center px-4 py-8 sm:px-6 sm:py-12">
+      <main className="w-full max-w-5xl">
+        <header className="mb-8 flex items-center justify-between rounded-2xl border border-black/10 bg-white/70 px-4 py-3 backdrop-blur sm:px-6">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-rose-900/70">
+            for you, triana
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          <p className="text-sm text-stone-700">sedikit curahan hati aku</p>
+        </header>
+
+        <section className="grid gap-5 sm:grid-cols-2">
+          <article className="hero-shell surface-card sm:col-span-2">
+            <p className="hero-kicker">untuk kamu, yang masih aku sayang</p>
+            <h1 className="hero-title">Aku minta maaf.
+Aku datang dengan niat yang lebih tenang, tanpa emosi yang meledak-ledak seperti sebelumnya.</h1>
+            <p className="hero-copy">
+              Aku tahu akhir-akhir ini hubungan kita lagi nggak baik, dan mungkin capek juga buat kamu.
+Di sini aku nggak mau sok kuat atau nutupin apa yang aku rasain.
+
+Aku kangen. Aku masih peduli.
+Dan aku sadar, masih banyak hal dari diriku yang perlu aku perbaiki.
+
+Lewat halaman ini, aku cuma ingin minta maaf dengan tulus.
+Dan kalau kamu masih ada sedikit ruang, aku pengen kita bisa ngobrol lagi—pelan-pelan, tanpa tekanan.
+            </p>
+
+            <div className="hero-cta-row">
+              <a className="hero-btn-primary" href="#story-cards">
+                Baca pelan-pelan
+              </a>
+              <a className="hero-btn-ghost" href="#closing-choice">
+                Lihat cara hadapi konflik
+              </a>
+            </div>
+
+            <div className="hero-meta-grid">
+              <div>
+                <p className="hero-meta-label">Fokus</p>
+                <p className="hero-meta-value">Tulus, tenang, tanpa menyalahkan</p>
+              </div>
+              <div>
+                <p className="hero-meta-label">Durasi baca</p>
+                <p className="hero-meta-value">3 sampai 5 menit</p>
+              </div>
+              <div>
+                <p className="hero-meta-label">Tujuan</p>
+                <p className="hero-meta-value">Membuka ruang komunikasi yang lebih sehat</p>
+              </div>
+            </div>
+          </article>
+
+          <article id="story-cards" className="surface-card sm:col-span-2">
+            <h2 className="section-title">Yang Ingin Aku Sampaikan</h2>
+            <p className="section-copy mb-5">
+Ada beberapa hal yang mungkin belum pernah aku sampaikan dengan cara yang tepat.
+Jadi aku coba tulis pelan-pelan di sini.
+            </p>
+
+            <div className="story-grid">
+              {storyCards.map((card) => (
+                <div key={card.tag} className="story-card-item">
+                  <p className="story-chip">{card.tag}</p>
+                  <h3 className="story-title">{card.title}</h3>
+                  <p className="story-copy">{card.body}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article id="memory-timeline" className="surface-card sm:col-span-2">
+            <h2 className="section-title">Perjalanan Kita</h2>
+            <p className="section-copy mb-5">
+              Aku buat section ini biar kita sama-sama ingat hal-hal kecil yang dulu pernah bikin semuanya terasa hangat.
+            </p>
+
+            <div className="timeline-list">
+              {timelineMoments.map((moment, index) => {
+                const isVideo = isVideoFile(moment.image);
+
+                return (
+                  <article key={moment.date} className={`timeline-item ${isVideo ? "timeline-item--video" : "timeline-item--image"}`}>
+                    <div className={`timeline-media-wrap ${isVideo ? "timeline-media-wrap--video" : ""}`}>
+                      {isVideo ? (
+                        <video
+                          className="timeline-media timeline-media--video"
+                          src={moment.image}
+                          muted
+                          loop
+                          autoPlay
+                          playsInline
+                          preload="metadata"
+                        />
+                      ) : (
+                        <Image
+                          className="timeline-media"
+                          src={moment.image}
+                          alt={moment.imageAlt}
+                          width={1200}
+                          height={900}
+                          loading="eager"
+                          sizes="(min-width: 760px) 11rem, 34vw"
+                        />
+                      )}
+                    </div>
+
+                    <div className="timeline-content">
+                      <div className="timeline-top">
+                        <p className="timeline-index">Momen 0{index + 1}</p>
+                        <h3 className="timeline-title">{moment.title}</h3>
+                        <p className="timeline-meta">
+                          {moment.date} | {moment.place}
+                        </p>
+                      </div>
+                      <p className="timeline-insight">{moment.insight}</p>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </article>
+
+          <BloomingApology />
+
+          <PromiseAndChoice />
+        </section>
       </main>
     </div>
   );
