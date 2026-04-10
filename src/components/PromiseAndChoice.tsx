@@ -142,7 +142,7 @@ export default function PromiseAndChoice() {
 
           <div className="empathy-grid">
             <div>
-              <h3 className="empathy-subtitle">Yang Sudah Bagus</h3>
+              <h3 className="empathy-subtitle">Yang Sudah Bagus:</h3>
               <ul className="empathy-list">
                 {strengthsForDisplay.map((item) => (
                   <li key={item}>{item}</li>
@@ -151,7 +151,7 @@ export default function PromiseAndChoice() {
             </div>
 
             <div>
-              <h3 className="empathy-subtitle">Yang Perlu Diperbaiki</h3>
+              <h3 className="empathy-subtitle">Yang Perlu Diperbaiki:</h3>
               <ul className="empathy-list is-warning">
                 {result.issues.map((item) => (
                   <li key={item}>{item}</li>
@@ -161,7 +161,7 @@ export default function PromiseAndChoice() {
           </div>
 
           <div className="empathy-suggestion-box">
-            <h3 className="empathy-subtitle">Saran Lanjut</h3>
+            <h3 className="empathy-subtitle">Saran Lanjutan:</h3>
             <ul className="empathy-list">
               {result.suggestions.map((item) => (
                 <li key={item}>{item}</li>
@@ -170,7 +170,7 @@ export default function PromiseAndChoice() {
           </div>
 
           <div className="empathy-suggestion-box">
-            <h3 className="empathy-subtitle">Contoh Revisi</h3>
+            <h3 className="empathy-subtitle">Contoh tindakan yang aku rekomendasikan:</h3>
             <p className="empathy-rewrite">{result.rewrite}</p>
           </div>
 
