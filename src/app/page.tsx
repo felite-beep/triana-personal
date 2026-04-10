@@ -130,7 +130,7 @@ Dan kalau kamu masih ada sedikit ruang, aku pengen kita bisa ngobrol lagi—pela
                 Baca pelan-pelan
               </button>
               <button className="hero-btn-ghost" onClick={revealAllSections} type="button">
-                Lihat semua section
+                Langsung Lihat Semua Aja
               </button>
             </div>
 
