@@ -112,10 +112,9 @@ export default function Home() {
         <section className="grid gap-5 sm:grid-cols-2">
           <article className="hero-shell surface-card sm:col-span-2">
             <p className="hero-kicker">untuk kamu, yang masih aku sayang</p>
-            <h1 className="hero-title">Aku minta maaf.
-Aku datang dengan niat yang lebih tenang, tanpa emosi yang meledak-ledak seperti sebelumnya.</h1>
+            <h1 className="hero-title">Aku minta maaf. Kali ini aku datang tanpa bawa emosi berlebihan, dan dengan kepala yang lebih dingin.</h1>
             <p className="hero-copy">
-              Aku tahu akhir-akhir ini hubungan kita lagi nggak baik, dan mungkin capek juga buat kamu.
+              Kita sama-sama tau akhir-akhir ini hubungan kita lagi nggak baik, dan pasti capek juga buat kamu.
 Di sini aku nggak mau sok kuat atau nutupin apa yang aku rasain.
 
 Aku kangen. Aku masih peduli.
